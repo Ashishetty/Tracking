@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home - Vegetable Store</title>
+    <link rel="stylesheet" href="Style.css" />
+    <!-- Link to your CSS file -->
+  </head>
+
+  <body>
+    <!-- Page Title -->
+    <h1 class="page-title">Welcome to Our Vegetable Store</h1>
+
+    <!-- Dispatch Address Section -->
+    <div class="dispatch-address">
+      <h2>Dispatch Address</h2>
+      <p>Enter your delivery address below:</p>
+    </div>
+
+    <!-- User Address Input Form -->
+    <div class="user-address">
+      <h2>Enter Your Address</h2>
+      <form>
+        <label for="address">Delivery Address:</label><br />
+        <textarea
+          id="address"
+          rows="4"
+          cols="50"
+          placeholder="Enter your delivery address"
+        ></textarea
+        ><br />
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+
+    <!-- Category List -->
+    <ul class="category-list">
+      <li><a href="#">Top Rated</a></li>
+      <li><a href="#">Best Selling</a></li>
+      <li><a href="#">On Sale</a></li>
+    </ul>
+
+    <!-- Product Grid -->
+    <div class="product-grid">
+      <div class="product-card">
+        <img
+          src="E:\tracking\Images\t7.jpeg"
+          alt="Product 1"
+          class="product-image"
+        />
+        <div class="product-name">Blue Hoodie</div>
+        <div class="product-price">$10.00</div>
+        <button class="add-to-cart" data-name="Blue Hoddie" data-price="15.00">
+          Add to Cart
+        </button>
+        <button class="buy-now">Buy Now</button>
+      </div>
+
+      <div class="product-card">
+        <img
+          src="E:\tracking\Images\headphone2.jpg"
+          alt="Product 2"
+          class="product-image"
+        />
+        <div class="product-name">Wireless Headphone</div>
+        <div class="product-price">$15.00</div>
+        <button
+          class="add-to-cart"
+          data-name="Wireless Headphone"
+          data-price="15.00"
+        >
+          Add to Cart
+        </button>
+        <button class="buy-now">Buy Now</button>
+      </div>
+
+      <div class="product-card">
+        <img
+          src="E:\tracking\Images\pant.jpg"
+          alt="Product 2"
+          class="product-image"
+        />
+        <div class="product-name">Baggy Pant</div>
+        <div class="product-price">$15.00</div>
+        <button class="add-to-cart" data-name="Pant" data-price="15.00">
+          Add to Cart
+        </button>
+        <button class="buy-now">Buy Now</button>
+      </div>
+
+      <div class="product-card">
+        <img
+          src="E:\tracking\Images\lettuce.jpg"
+          alt="Product 2"
+          class="product-image"
+        />
+        <div class="product-name">Lettuce</div>
+        <div class="product-price">$15.00</div>
+        <button class="add-to-cart" data-name="Lettuce" data-price="15.00">
+          Add to Cart
+        </button>
+        <button class="buy-now">Buy Now</button>
+      </div>
+
+      <div class="product-card">
+        <img
+          src="E:\tracking\Images\t2.jpeg"
+          alt="Product 2"
+          class="product-image"
+        />
+        <div class="product-name">Gray Hoddie</div>
+        <div class="product-price">$15.00</div>
+        <button class="add-to-cart" data-name="Gray Hoddie" data-price="15.00">
+          Add to Cart
+        </button>
+        <button class="buy-now">Buy Now</button>
+      </div>
+
+      <div class="product-card">
+        <img
+          src="E:\tracking\Images\watch2.jpg"
+          alt="Product 2"
+          class="product-image"
+        />
+        <div class="product-name">Sonata Gold</div>
+        <div class="product-price">$15.00</div>
+        <button class="add-to-cart" data-name="Sonata Gold" data-price="15.00">
+          Add to Cart
+        </button>
+        <button class="buy-now">Buy Now</button>
+      </div>
+
+      <div class="product-card">
+        <img
+          src="E:\tracking\Images\Brinjal.jpg"
+          alt="Product 2"
+          class="product-image"
+        />
+        <div class="product-name">Brinjal</div>
+        <div class="product-price">$15.00</div>
+        <button class="add-to-cart" data-name="Brinjal" data-price="15.00">
+          Add to Cart
+        </button>
+        <button class="buy-now">Buy Now</button>
+      </div>
+
+      <div class="product-card">
+        <img
+          src="E:\tracking\Images\Watch.jpg"
+          alt="Product 2"
+          class="product-image"
+        />
+        <div class="product-name">Black Edition Watch</div>
+        <div class="product-price">$15.00</div>
+        <button
+          class="add-to-cart"
+          data-name="Black Edition Watch"
+          data-price="15.00"
+        >
+          Add to Cart
+        </button>
+        <button class="buy-now">Buy Now</button>
+      </div>
+    </div>
+    <div class="cart-summary">
+      <h3>Cart Summary</h3>
+      <ul id="cart-items">
+        <!-- Cart items will be dynamically added here -->
+      </ul>
+      <p id="total-price">Total: $0.00</p>
+      <button class="place-order">Place Order</button>
+    </div>
+
+    <script src="cart.js"></script>
+  </body>
+</html>

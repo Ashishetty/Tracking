@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Order Tracking</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+    />
+    <style>
+      /* Styles for the map */
+      #map {
+        width: 100%;
+        height: 400px;
+      }
+      /* Styles for the ad content */
+      .ad {
+        margin-bottom: 20px;
+        border: 1px solid #ccc;
+        padding: 15px;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+      }
+      .ad h3 {
+        margin: 0 0 10px;
+      }
+      .ad img {
+        max-width: 100%;
+        height: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Track Your Order</h1>
+
+    <!-- Ad Section -->
+    <div id="ad-content"></div>
+
+    <!-- Map Section -->
+    <div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+    <script>
+      // Function to get order details based on the order ID
+      function getOrderDetails(orderId) {
+        const orders = {
+          101: { product: "Hoodie" },
+          102: { product: "Pant" },
+          103: { product: "Watch" },
+          104: { product: "Vegetable" },
+          105: { product: "Shirt" },
+          106: { product: "Shoes" },
+          // Add more products as needed
+        };
+        return orders[Number(orderId)] || { product: "Unknown" };
+      }
+
+      // Function to fetch relevant ads based on the product ordered
+      function fetchRelevantAd(product) {
+        const ads = {
+          Hoodie: [
+            {
+              title: "Complete Your Look with Pants!",
+              image: "E:/tracking/Images/pant.jpg",
+              description: "Pair your hoodie with stylish pants.Get upto 50% off",
+            },
+            {
+              title: "Accessorize with a Watch!",
+              image: "E:/tracking/Images/Watch.jpg",
+              description: "Finish the look with a stylish watch.",
+            },
+          ],
+          Pant: [
+            {
+              title: "Style Your Pant with a Hoodie!",
+              image: "E:/tracking/Images/t2.jpeg",
+              description: "Get the perfect hoodie to go with your pants.",
+            },
+            {
+              title: "Add a Watch for the Perfect Look!",
+              image: "./Images/watch.jpg",
+              description: "Complete your outfit with a matching watch.",
+            },
+          ],
+          Watch: [
+            {
+              title: "Pair with a Hoodie!",
+              image: "./Images/hoodie.jpg",
+              description: "A stylish hoodie to complement your watch.",
+            },
+            {
+              title: "Style with Pants!",
+              image: "./Images/pants.jpg",
+              description: "The perfect pair of pants for your watch.",
+            },
+          ],
+          Vegetable: [
+            {
+              title: "Fresh Fruits on Sale!",
+              image: "./Images/fruits.jpg",
+              description: "Organic fruits, fresh and healthy.",
+            },
+            {
+              title: "Vegetable Basket Offers!",
+              image: "./Images/veg-basket.jpg",
+              description: "Farm-fresh vegetables, now at discounted prices.",
+            },
+          ],
+          // Add more categories and ads as needed
+        };
+
+        return (
+          ads[product] || [
+            {
+              title: "No Ads Available",
+              image: "",
+              description: "Check back later!",
+            },
+          ]
+        );
+      }
+
+      // Function to load relevant ads for the order
+      function loadAd(orderId) {
+        const orderDetails = getOrderDetails(orderId);
+        const product = orderDetails.product;
+        const ads = fetchRelevantAd(product);
+
+        let adContent = "";
+        ads.forEach((ad) => {
+          adContent += `
+          <div class="ad">
+            <h3>${ad.title}</h3>
+            <p>${ad.description}</p>
+            <img src="${ad.image}" alt="Ad Image" style="max-width:100%; height:auto;">
+          </div>
+        `;
+        });
+
+        document.getElementById("ad-content").innerHTML = adContent;
+      }
+
+      // Function to initialize the map
+      function initMap() {
+        // Set the dispatch point (starting point)
+        const dispatchLatLng = [20.5937, 78.9629]; // You can replace this with your dispatch location
+        const map = L.map("map").setView(dispatchLatLng, 5);
+
+        // Add OpenStreetMap tile layer to the map
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+          attribution:
+            '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        }).addTo(map);
+
+        // Define waypoints (dispatch point and order destination)
+        const waypoints = [
+          L.latLng(dispatchLatLng), // Dispatch point
+          L.latLng([12.9716, 77.5946]), // Order destination (e.g., Bangalore coordinates)
+        ];
+
+        // Create a polyline to show the route
+        const route = L.polyline(waypoints, {
+          color: "blue",
+          weight: 4,
+          opacity: 2,
+        }).addTo(map);
+
+        // Add markers for each waypoint
+        L.marker(waypoints[0])
+          .addTo(map)
+          .bindPopup("Dispatch Point")
+          .openPopup();
+        L.marker(waypoints[1])
+          .addTo(map)
+          .bindPopup("Order Location")
+          .openPopup();
+
+        // Add a polyline that will be used to animate the delivery guy's movement
+        const deliveryMarker = L.marker(waypoints[0], {
+          icon: L.icon({
+            iconUrl:
+              "https://upload.wikimedia.org/wikipedia/commons/a/a0/Location_pin_icon.png",
+            iconSize: [32, 32],
+          }),
+        }).addTo(map);
+
+        // Function to animate the delivery guy's movement
+        function animateDelivery() {
+          const deliveryPath = new L.Polyline(waypoints, {
+            color: "red",
+          }).addTo(map);
+          const numSteps = 100; // Define the number of steps in the animation
+          const interval = 100; // Interval time in milliseconds
+          let currentStep = 0;
+
+          // Function to update the marker position for each step
+          function moveMarker() {
+            const latLng = route.getLatLngs();
+            if (currentStep < numSteps) {
+              currentStep++;
+              const lat =
+                latLng[0].lat +
+                (latLng[1].lat - latLng[0].lat) * (currentStep / numSteps);
+              const lng =
+                latLng[0].lng +
+                (latLng[1].lng - latLng[0].lng) * (currentStep / numSteps);
+              deliveryMarker.setLatLng([lat, lng]);
+            } else {
+              clearInterval(animationInterval);
+            }
+          }
+
+          const animationInterval = setInterval(moveMarker, interval);
+        }
+
+        // Trigger the animation after 2 seconds (for example)
+        setTimeout(() => {
+          animateDelivery();
+        }, 2000);
+      }
+
+      window.onload = function () {
+        // For demonstration, simulate order ID (you can replace this with actual order ID)
+        const orderId = 101; // Replace this with the actual order ID
+        loadAd(orderId);
+        initMap();
+      };
+    </script>
+  </body>
+</html>
